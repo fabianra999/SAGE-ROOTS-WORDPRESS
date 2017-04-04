@@ -68,6 +68,63 @@ Volvemos a la terminal y ejecutamos gulp styles, comprobaremos que los estilos h
 Para eliminar componentes JS lo hacemos desde el archivo bower.json que está en la raiz del tema, eliminamos aquellos que no vayamos a utilizar y ejecutamos gulp scripts. <br>
 <code>gulp scripts</code>
 
-9. Jerarquía de archivos y carpetas <br>
+9. Configurar wp-config <br>
+En este archivo enlasamos la base de datos. <br>
+configuramos el tema <b>Sage</b> poniendo al final del archivo. <br>
+<code> //config tema sage </code><br>
+<code>define('WP_ENV', 'development');</code>
+
+<br><br><br>
+<b>Crear tpl</b> <br>
+1. crea Tpl <br>
+crear archivo .php y al inicio referenciarlo <code>?pph /* Template Name: Home */ ?</code> <br>
+
+2. importar section a tpl <br>
+si el tpl se compone de varias secciones se pueden llamas de esta forma.<br>
+<code>?php get_template_part('home/nosotros'); ? </code><br>
+<code>?php get_template_part('home/temas'); ?</code> <br>
+<br><br>
+
+<b>Magic field</b><br>
+Magic field es un plugin de worpress que ayuda a generar contenidos y campos personalisados. <br>
+
+1. Para llamar post types de magic field el markup <br>
+<code>?php query_posts('post_type=beneficios'); </code><br>
+<code> while (have_posts()) : the_post(); ?</code><br>
+<code><!- mi markup -> </code><br>
+<code><!- campo magic field -> </code><br>
+<code>?php endwhile; ?</code><br>
+
+2. Traer campo de magic field dentro de post types <br>
+<code>?php echo get('quienes_somos_contenido'); ?</code>
+
+3. traer  grupo duplicable con magic field: donde ('listado_beneficios_beneficio'); es el nombre del grupo<br>
+<code>
+   <!-- Listar los beneficios: repeat --> <br>
+                |-?php <br>
+                $beneficios = get_field('listado_beneficios_beneficio'); <br>
+                foreach($beneficios as $key => $beneficio) : <br>
+                $claseB = ($key % 2 == 0) ? 'odd' : 'even'; <br>
+                ?-| <br>
+
+                |-div class="col-xs-12 col-sm-5 col-sm-offset-1 alingTop col-centered |-?php echo $claseB; ?-| "-| <br>
+                |-p-| |-?php echo $beneficio; ?-| |-/p-| <br>
+                |-/div-| <br>
+                |-?php endforeach; ?-| <br>
+</code>
+3. traer campo de un grupo donde get_group('quieres_footer') es el nombre del grupo y 'quieres_footer_btn_url' es el campo.<br>
+<code>
+  |-div class="content content_btn_footer"-| <br>
+                |-?php <br>
+                $elements = get_group('quieres_footer'); <br>
+                foreach($elements as $key => $element){  <br>
+                print "|-a href=".$element['quieres_footer_btn_url'][1].">". $element['quieres_footer_btn_titulo'][1] ."|-/a-|"; <br>
+                } <br>
+                ?-|
+                |-/div-|
+</code>
 
 
+
+<b>ver</b>
+ <a href="https://www.advancedcustomfields.com/resources/"> documentacion advancedcustomfields</a>
